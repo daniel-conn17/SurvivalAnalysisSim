@@ -1,0 +1,10 @@
+Package: SurvivalAnalysisSim
+Title: Easy Survival Analysis Simulations
+Version: 0.1
+Authors@R: "Daniel Conn <djconn17@gmail.com> [aut, cre]"
+Description: This package easily and conveniently
+generates survival analysis data sets so that
+new methods can be tested out.
+Depends: R (>= 3.1.2)
+License: What license is it under?
+LazyData: true
