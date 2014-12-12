@@ -1,8 +1,14 @@
-Package: SurvivalAnalysisSim
+Package: survsimpack
 Title: Easy Survival Analysis Simulations
-Version: 0.1
+Version: 0.0.0.9000
 Authors@R: "Daniel Conn <djconn17@gmail.com> [aut, cre]"
-Description: ddf
+Description: This package is designed to make it
+  easy to generate survival analysis data sets.
+  We wish to experiment with how different survival
+  analysis methods work in high dimensions.  We also
+  wish to experiment with how these methods deal with
+  non-linear structure, interactions, and varying levels
+  of censoring.
 Depends: R (>= 3.1.2)
 License: What license is it under?
 LazyData: true
