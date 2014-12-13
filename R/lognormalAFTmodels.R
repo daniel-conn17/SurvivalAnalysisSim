@@ -21,13 +21,12 @@
 #' log normal AFT model.  The user specifies the sample size,
 #' the number of covariates, support of beta, and censoring rate.
 #' The elements of \eqn{X} are iid standard normal.
-#' Let \eqn{\beta= (\beta_{supp},0)}.  Log survival times, \eqn{y_{i}} are
+#' Let \eqn{\beta= (\beta_{supp},0)}.  The log survival times, \eqn{y} are
 #' generated as follows \eqn{y = X\beta + \epsilon} where the elements of
 #' \eqn{\epsilon} are iid normal with mean 0 and standard deviation
 #' \code{sd_err}.
 #'
 #' @examples linear_normal_aft(1000, 5, .1, 1, .3)
-
 
 linear_normal_aft <- function(n, p, sd_err, support_beta, censoring_rate) {
   if(length(support_beta) > p){
@@ -94,7 +93,7 @@ linear_normal_aft <- function(n, p, sd_err, support_beta, censoring_rate) {
 #' log normal AFT model.  The user specifies the sample size,
 #' the number of covariates, support of beta, and censoring rate.
 #' The elements of \eqn{X} are iid standard normal.
-#' Let \eqn{\beta= (\beta_{supp},0)}.  Log survival times, \eqn{y_{i}} are
+#' Log survival times, \eqn{y_{i}} are
 #' generated as follows \eqn{y_{i} = f(x_{i}) + \epsilon_{i}} where the
 #' \eqn{\epsilon_{i}} are iid normal with mean 0 and standard deviation
 #' \code{sd_err}.
