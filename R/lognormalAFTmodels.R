@@ -26,10 +26,10 @@
 #' \eqn{\epsilon} are iid normal with mean 0 and standard deviation
 #' \code{sd_err}.
 #'
-#' @examples linear_aft(1000, 5, .1, 1, .3)
+#' @examples linear_normal_aft(1000, 5, .1, 1, .3)
 
 
-linear_aft <- function(n, p, sd_err, support_beta, censoring_rate) {
+linear_normal_aft <- function(n, p, sd_err, support_beta, censoring_rate) {
   if(length(support_beta) > p){
     print("exit: support of beta is larger than p")
     return(NULL)
@@ -104,10 +104,10 @@ linear_aft <- function(n, p, sd_err, support_beta, censoring_rate) {
 #' f <- function(x){
 #'  x[1] + x[2] + x[1]*x[2]
 #' }
-#' nonlinear_aft(1000, 5, .1, f, .25)
+#' nonlinear_normal_aft(1000, 5, .1, f, .25)
 
 
-nonlinear_aft <- function(n, p, sd_err, f, censoring_rate) {
+nonlinear_normal_aft <- function(n, p, sd_err, f, censoring_rate) {
   if(p > n){
     print("warning: p > n")
   }
