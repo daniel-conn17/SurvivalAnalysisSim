@@ -1,4 +1,15 @@
-linearAFT <- function(n, p, sd_err, nonzero_beta, target_p_cens) {
+#' Generate data from linear log-normal AFT model.
+#'
+#' @param n Sample size.
+#' @param p Number of covariates.
+#' @param sd_err Standard error of \eqn{\epsilon}.
+#' @param nonzero_beta Vector of non-zero coefficients.
+#' @param censoring_rate Censoring rate.
+#' @return linearAFT returns an object of class "survsim".
+#' @examples linearAFT(1000, 5, .1, 1, .3)
+
+
+linearAFT <- function(n, p, sd_err, nonzero_beta, censoring_rate) {
   if(length(beta) > p){
     print("exit: beta is larger than p")
     return(NULL)
@@ -11,7 +22,9 @@ linearAFT <- function(n, p, sd_err, nonzero_beta, target_p_cens) {
   beta <- c(nonzero_beta,rep(0,p - support_size))
   y <- X%*%beta + rnorm(n,mean=0, sd=sd_err)
   t <- exp(y)
-  #generate data to figure censoring parameter
+  #Censoring distribution will be exponential.
+  #We will generate a larger data set to determine
+  #what it's mean should be.
   n_cens <- 10000
   X_cens <- matrix(rnorm(n_cens*p), nrow=n_cens, ncol=p)
   y_cens <- X_cens%*%beta + rnorm(n_cens, mean=0, sd=sd_err)
@@ -24,12 +37,14 @@ linearAFT <- function(n, p, sd_err, nonzero_beta, target_p_cens) {
     cens <- rexp(n_cens, 1/current_quant)
     cens_prob[i] <- table(cens < t_cens)[2]/n_cens
   }
-  diffs <- abs(cens_prob - target_p_cens)
+  diffs <- abs(cens_prob - censoring_rate)
   best_cens_ind <- which.min(diffs)
   cens_param <- quantile(t_cens, test_quantiles[best_cens_ind])
   c <- rexp(n, 1/cens_param)
   delta <- t < c
   delta <- as.numeric(delta)
   t <- apply(cbind(y,c), 1, min)
-  return(list(X, y, c, t, delta))
+  out <- list(X, y, c, t, delta)
+  class(out) <- "survsim"
+  return(out)
 }
