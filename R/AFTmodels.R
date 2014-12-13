@@ -1,25 +1,36 @@
 #' Generate data from linear log-normal AFT model.
 #'
-#' @param n Sample size.
-#' @param p Number of covariates.
-#' @param sd_err Standard error of \eqn{\epsilon}.
-#' @param nonzero_beta Vector of non-zero coefficients.
-#' @param censoring_rate Censoring rate.
-#' @return linearAFT returns an object of class "survsim".
-#' @examples linearAFT(1000, 5, .1, 1, .3)
+#' @param  n Sample size.
+#' @param  p Number of covariates.
+#' @param  sd_err Standard deviation of the error term, \eqn{\epsilon}.
+#' @param  support_beta Support of \eqn{\beta} (non-zero coefficients).
+#' @param  censoring_rate Censoring rate.
+#' @return linearAFT returns an object of class "survsim".  An object of class
+#'        "survsim" is a list containing the following components.
+#'    \itemize{
+#'    \item X: matrix of covariates
+#'    \item y: unobserved log-survival times
+#'    \item t: unobserved survival times
+#'    \item c: unobserved censoring times.
+#'    \item obs_times: observed time on study (min(t,c)).
+#'    \item delta: vector indicating whether observation is
+#'    censored (1=failure, 0=censored).
+#'    }
+#'
+#' @examples linear_aft(1000, 5, .1, 1, .3)
 
 
-linearAFT <- function(n, p, sd_err, nonzero_beta, censoring_rate) {
-  if(length(beta) > p){
-    print("exit: beta is larger than p")
+linear_aft <- function(n, p, sd_err, support_beta, censoring_rate) {
+  if(length(support_beta) > p){
+    print("exit: support of beta is larger than p")
     return(NULL)
   }
   if(p > n){
     print("warning: p > n")
   }
   X <- matrix(rnorm(n*p), nrow=n, ncol=p)
-  support_size <- length(beta)
-  beta <- c(nonzero_beta,rep(0,p - support_size))
+  support_size <- length(support_beta)
+  beta <- c(support_beta,rep(0,p - support_size))
   y <- X%*%beta + rnorm(n,mean=0, sd=sd_err)
   t <- exp(y)
   #Censoring distribution will be exponential.
@@ -43,8 +54,8 @@ linearAFT <- function(n, p, sd_err, nonzero_beta, censoring_rate) {
   c <- rexp(n, 1/cens_param)
   delta <- t < c
   delta <- as.numeric(delta)
-  t <- apply(cbind(y,c), 1, min)
-  out <- list(X, y, c, t, delta)
+  obs_times <- apply(cbind(t,c), 1, min)
+  out <- list(X, y, t, c, obs_times, delta)
   class(out) <- "survsim"
   return(out)
 }
